@@ -3,33 +3,101 @@
   <head>
     <meta charset="UTF-8">
     <title>News Tracker</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
+
+<style>
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>
+
+</head>
+<body>
+    
              <div id="list-view">
         </div> 
       
-      
-<!--
-    <div id="buttons">
-      <button id="weight-sort">Sort By Weight</button>
-      <button id="name-sort">Sort By Name</button>
-    </div>
--->
-<!--
-    <table id="results">
-      <thead>
-        <tr>
-          <th id="news-title">Title</th>
-          <th id="news-sum">Summary</th>
-          <th id="news-link">Link</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
--->
-    <script src="app.js"></script>
+    
+<!-- Trigger/Open The Modal -->
+<!--<button id="myBtn">Open Modal</button>-->
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+  </div>
+</div>
+<script>
+    setTimeout(function(){
+// Get the modal
+var modal = document.getElementById('myModal');
+// Get the button that opens the modal
+var btn = document.getElementsByClassName("myBtn");
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+// When the user clicks the button, open the modal
+        
+$(".myBtn").click(function() {
+    modal.style.display = "block";
+    var specID = $(this).attr("data-mongo-id");
+    console.log(specID);
+    var noteDisp = '<div class="temp-form"><textarea id="note" style="width:100%"></textarea> <input type="button" value="Submit" class="noteSubmit" data-mongo-id="' + specID + '"></div>';
+    $(".modal-content").append(noteDisp);
+    });
+    
+//btn.onclick = function() {
+//    modal.style.display = "block";
+//}
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+    $(".temp-form").remove();
+}
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+}, 1000);
+</script>      
+     <script src="app.js"></script> 
+
   </body>
 </html>

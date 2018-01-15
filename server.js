@@ -4,6 +4,7 @@ var mongojs = require("mongojs");
 // Require request and cheerio. This makes the scraping possible
 var request = require("request");
 var cheerio = require("cheerio");
+var ObjectID = require("mongodb").ObjectID;
 
 // Initialize Express
 var app = express();
@@ -72,11 +73,12 @@ request("https://www.nytimes.com/section/us", function(error, response, html) {
       // If this found element had both a title and a link
       if (title && summary && link) {
         // Insert the data in the newstrackerdata db
-        db.newstrackerdata.insert({
-      title: title,
+db.newstrackerdata.update({
+    title: title},
+   {title: title,
       summary: summary,
-      link: link
-    },
+      link: link},
+   {upsert: true},
         function(err, inserted) {
           if (err) {
             // Log the error if one is encountered during the query
@@ -88,7 +90,7 @@ request("https://www.nytimes.com/section/us", function(error, response, html) {
           }
         });
       }
-      return i<19;
+//      return i<19;
     });
   });
 
@@ -96,7 +98,27 @@ request("https://www.nytimes.com/section/us", function(error, response, html) {
   res.send("Scrape Complete");
 });
 
-// 3. At the "/name" path, display every entry in the animals collection, sorted by name
+////////////////////////////////////////////////////////////////////////////////////////
+var idInsert = '5a5c52f821052f496b51206f';
+//var mongoIDShell = 'ObjectId("' + idInsert +'")';
+app.get("/notepost", function () {
+    db.newstrackerdata.update({_id: ObjectID(idInsert)}, {$push: {notes: "test note"}},
+        function(err, inserted) {
+          if (err) {
+            // Log the error if one is encountered during the query
+            console.log(err);
+          }
+          else {
+            // Otherwise, log the inserted data
+            console.log(inserted);
+          }
+        });
+//db.newstrackerdata.update(
+//   {_id: idInsert},
+//    {$push: {notes: "test note"}});
+});
+////////////////////////////////////////////////////////////////////////////////////////
+
 app.get("/name", function(req, res) {
   // Query: In our database, go to the animals collection, then "find" everything,
   // but this time, sort it by name (1 means ascending order)
