@@ -27,11 +27,6 @@ db.on("error", function(error) {
   console.log("Database Error:", error);
 });
 
-// Main route (simple Hello World Message)
-//app.get("/", function(req, res) {
-//  res.send("Hello world");
-//});
-
 require("./routing/apiRoutes")(app);
 
 // Retrieve data from the db
@@ -75,8 +70,6 @@ request("https://www.nytimes.com/section/us", function(error, response, html) {
       if (link === undefined) {
 
       link = $(element).closest("a").attr("href");
-
-      // link = "https://www.nytimes.com/section/us";
     }
 
       // If this found element had both a title and a link
@@ -99,19 +92,19 @@ db.newstrackerdata.update({
           }
         });
       }
-//      return i<19;
     });
   });
-
   // Send a "Scrape Complete" message to the browser
   res.send("Scrape Complete");
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////
-var idInsert = '5a5c52f821052f496b51206f';
-//var mongoIDShell = 'ObjectId("' + idInsert +'")';
-app.get("/notepost", function (data) {
-    db.newstrackerdata.update({_id: ObjectID(idInsert)}, {$push: {notes: data}},
+//var idInsert = '5a5c52f821052f496b512070';
+app.put("/notepost", function () {
+var friends = require("./data/friends");
+    var idInsert = friends[0].newNoteID;
+    var noteInsert = friends[0].currentNote;
+    db.newstrackerdata.update({_id: ObjectID(idInsert)}, {$push: {notes: noteInsert}},
         function(err, inserted) {
           if (err) {
             // Log the error if one is encountered during the query
@@ -122,9 +115,6 @@ app.get("/notepost", function (data) {
             console.log(inserted);
           }
         });
-//db.newstrackerdata.update(
-//   {_id: idInsert},
-//    {$push: {notes: "test note"}});
 });
 ////////////////////////////////////////////////////////////////////////////////////////
 
