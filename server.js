@@ -44,27 +44,18 @@ app.get("/all", function(req, res) {
   });
 });
 
-// Scrape data from one site and place it into the mongodb db
+//----------------------------------------------------------------------------------------------------------------------
 app.get("/scrape", function(req, res) {
-  // Make a request for the news section of ycombinator
 request("https://www.nytimes.com/section/us", function(error, response, html) {
 
-  // Load the HTML into cheerio and save it to a variable
-  // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
   var $ = cheerio.load(html);
 
-  // An empty array to save the data that we'll scrape
   var results = [];
 
-  // With cheerio, find each p-tag with the "title" class
-  // (i: iterator. element: the current element)
   $("h2.headline").each(function(i, element) {
 
-    // Save the text of the element in a "title" variable
     var title = $(element).text().trim();
     var summary = $(element).siblings('.summary').text().trim();
-    // In the currently selected element, look at its child elements (i.e., its a-tags),
-    // then save the values for any "href" attributes that the child elements may have
     var link = $(element).children().attr("href");
 
       if (link === undefined) {
@@ -72,9 +63,7 @@ request("https://www.nytimes.com/section/us", function(error, response, html) {
       link = $(element).closest("a").attr("href");
     }
 
-      // If this found element had both a title and a link
       if (title && summary && link) {
-        // Insert the data in the newstrackerdata db
 db.newstrackerdata.update({
     title: title},
    {title: title,
@@ -83,21 +72,18 @@ db.newstrackerdata.update({
    {upsert: true},
         function(err, inserted) {
           if (err) {
-            // Log the error if one is encountered during the query
             console.log(err);
           }
           else {
-            // Otherwise, log the inserted data
             console.log(inserted);
           }
         });
       }
     });
   });
-  // Send a "Scrape Complete" message to the browser
   res.send("Scrape Complete");
 });
-
+//----------------------------------------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 //var idInsert = '5a5c52f821052f496b512070';
 var friends = require("./data/friends");
