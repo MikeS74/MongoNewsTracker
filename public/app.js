@@ -40,11 +40,27 @@ $.getJSON("/all", function (data) {
 
 $(".modal-content").on("click", ".noteSubmit", function () {
     var currentNote = $("#note").val().trim();
-    console.log(currentNote);
-        var newNoteID = $(this).attr("data-mongo-id");
-    $.getJSON("/notepost", function() {
-
-    });
+    var newNoteID = $(this).attr("data-mongo-id");
+    var newNoteObj = {
+        newNoteID: newNoteID,
+        currentNote: currentNote
+    }
+    console.log(newNoteObj);
+ 
+    var currentURL = window.location.origin;
+    $.post(currentURL + "/api/friends", newNoteObj, function (data) {
+        
+    });   
+    
+//var dataToBeSent = currentNote;
+//var url = window.location.origin;
+//$.post(url + "/api/friends", dataToBeSent, function(data, textStatus) {
+//    console.log(textStatus);
+//}, "json");
+    
+//    $.getJSON("/notepost", function() {
+//
+//    });
 });
 ///////////////////////////////////////////////////////////////////////////////////////
 

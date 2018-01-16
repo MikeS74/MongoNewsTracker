@@ -8,6 +8,13 @@ var ObjectID = require("mongodb").ObjectID;
 
 // Initialize Express
 var app = express();
+
+var bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(bodyParser.json());
+
 app.use(express.static("public"));
 // Database configuration
 var databaseUrl = "newstrackerdb";
@@ -24,6 +31,8 @@ db.on("error", function(error) {
 //app.get("/", function(req, res) {
 //  res.send("Hello world");
 //});
+
+require("./routing/apiRoutes")(app);
 
 // Retrieve data from the db
 app.get("/all", function(req, res) {
@@ -101,8 +110,8 @@ db.newstrackerdata.update({
 ////////////////////////////////////////////////////////////////////////////////////////
 var idInsert = '5a5c52f821052f496b51206f';
 //var mongoIDShell = 'ObjectId("' + idInsert +'")';
-app.get("/notepost", function () {
-    db.newstrackerdata.update({_id: ObjectID(idInsert)}, {$push: {notes: "test note"}},
+app.get("/notepost", function (data) {
+    db.newstrackerdata.update({_id: ObjectID(idInsert)}, {$push: {notes: data}},
         function(err, inserted) {
           if (err) {
             // Log the error if one is encountered during the query
