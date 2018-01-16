@@ -1,6 +1,8 @@
 // We'll be rewriting the table's data frequently, so let's make our code more DRY
 // by writing a function that takes in 'newstrackerdata' (JSON) and creates a table body
 function displayResults(newstrackerdata) {
+    
+
     // Then, for each entry of that json...
     newstrackerdata.forEach(function (newsdata) {
 
@@ -30,7 +32,7 @@ $.getJSON("/all", function (data) {
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////
-
+var modal = document.getElementById('myModal');
 $(".modal-content").on("click", ".noteSubmit", function () {
     var currentNote = $("#note").val().trim();
     var newNoteID = $(this).attr("data-mongo-id");
@@ -49,6 +51,6 @@ $(".modal-content").on("click", ".noteSubmit", function () {
         url: '/notepost',
         type: 'PUT'
     })
-    
+    modal.style.display = "none";
 });
 ///////////////////////////////////////////////////////////////////////////////////////

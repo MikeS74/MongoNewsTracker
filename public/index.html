@@ -49,11 +49,11 @@
 
 </head>
 <body>
+    <input type="button" value="SCRAPE ARTICLES" id="scrape-btn">
     
-             <div id="list-view">
-        </div> 
+             <div id="list-view"></div> 
       
-    
+    <div id="no-art"><p class="no-art"></p></div>
 <!-- Trigger/Open The Modal -->
 <!--<button id="myBtn">Open Modal</button>-->
 
@@ -66,6 +66,22 @@
 </div>
     
 <script>
+
+    $( document ).ready(function() {
+    console.log( "ready!" );
+                if ( $('#list-view').text().length == 0 ) {
+	$('.no-art').text("Looks like we don't have any new articles.");
+}
+});
+    
+     $("#scrape-btn").click(function() {       
+    $.ajax({
+        url: '/scrape',
+        type: 'GET'
+    })
+         location.reload();
+     });
+    
     setTimeout(function(){
 // Get the modal
 var modal = document.getElementById('myModal');
@@ -93,11 +109,17 @@ $(".notes-from-mongo").append(multipleNotes);
             }
         }
         });
+    if ( $('.notes-from-mongo').text().length == 0 ) {
+	$('.notes-from-mongo').text("No notes for this article yet.");
+}
         };
 //////////////////////////////////////////////////////////////////////////////////////////////         
         
 $(".myBtn").click(function() {
     modal.style.display = "block";
+        $(".temp-form").remove();
+    uniqueNotes = [];
+    $('.notes-from-mongo').text("");
 $.getJSON("/all", function (data) {
     displayNotes(data);
 });
@@ -120,6 +142,7 @@ $("#del-art").click(function() {
         url: '/delart',
         type: 'PUT'
     })
+    $(this).closest(".list-gen").remove();
   });      
     
 //btn.onclick = function() {
@@ -129,8 +152,7 @@ $("#del-art").click(function() {
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
-    $(".temp-form").remove();
-    uniqueNotes = [];
+
 }
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
