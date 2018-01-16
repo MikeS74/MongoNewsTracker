@@ -7,7 +7,7 @@ function displayResults(newstrackerdata) {
         var listDiv = $("<div class='list-gen'>");
 
         var dispAll = '<a href="' + newsdata.link + '" style="color: black; text-decoration: none"><p>' + newsdata.title + '</p>' + '<p>' + newsdata.summary + '</p></a><input type="button" value="ARTICLE NOTES" class="myBtn" data-mongo-id="' + newsdata._id + '">' +
-            '<input type="button" value="DELETE ARTICLE" id="del-art">';
+            '<input type="button" value="DELETE ARTICLE" id="del-art" data-mongo-id="' + newsdata._id + '">';
 
         listDiv.append(dispAll);
         $("#list-view").append(listDiv);
@@ -15,10 +15,18 @@ function displayResults(newstrackerdata) {
     });
 }
 
+//function displayNotes(newstrackerdata) {
+//    newstrackerdata.forEach(function (newsdata) {
+//        var savedNotes = [newsdata._id + [newsdata.notes]];
+//        console.log(savedNotes);
+//        });
+//}
+
 // First thing: ask the back end for json with all newstrackerdata
 $.getJSON("/all", function (data) {
     // Call our function to generate a table body
     displayResults(data);
+//    displayNotes(data);
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////

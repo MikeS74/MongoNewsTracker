@@ -100,10 +100,12 @@ db.newstrackerdata.update({
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //var idInsert = '5a5c52f821052f496b512070';
-app.put("/notepost", function () {
 var friends = require("./data/friends");
-    var idInsert = friends[0].newNoteID;
-    var noteInsert = friends[0].currentNote;
+var idInsert = "";
+var noteInsert = "";
+app.put("/notepost", function () {
+    idInsert = friends[0].newNoteID;
+    noteInsert = friends[0].currentNote;
     db.newstrackerdata.update({_id: ObjectID(idInsert)}, {$push: {notes: noteInsert}},
         function(err, inserted) {
           if (err) {
@@ -118,19 +120,18 @@ var friends = require("./data/friends");
 });
 ////////////////////////////////////////////////////////////////////////////////////////
 
-app.get("/name", function(req, res) {
-  // Query: In our database, go to the animals collection, then "find" everything,
-  // but this time, sort it by name (1 means ascending order)
-  db.newstrackerdata.find(function(error, found) {
-    // Log any errors if the server encounters one
-    if (error) {
-      console.log(error);
-    }
-    // Otherwise, send the result of this query to the browser
-    else {
-      res.json(found);
-    }
-  });
+app.put("/delart", function () {
+    idInsert = friends[0].newNoteID;
+    db.newstrackerdata.remove({_id: ObjectID(idInsert)}, function(err, deleted) {
+          if (err) {
+            // Log the error if one is encountered during the query
+            console.log(err);
+          }
+          else {
+            // Otherwise, log the inserted data
+            console.log(deleted);
+          }
+        });
 });
 
 // Listen on port 3000

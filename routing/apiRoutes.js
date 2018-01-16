@@ -14,4 +14,5 @@ module.exports = function(app) {
         console.log(userInfo);
         friends.unshift(userInfo);
     });
+};
     

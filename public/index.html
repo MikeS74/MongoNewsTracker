@@ -5,6 +5,7 @@
     <title>News Tracker</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <link rel="stylesheet" href="style.css">
 
 <style>
@@ -63,6 +64,7 @@
     <span class="close">&times;</span>
   </div>
 </div>
+    
 <script>
     setTimeout(function(){
 // Get the modal
@@ -72,14 +74,53 @@ var btn = document.getElementsByClassName("myBtn");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 // When the user clicks the button, open the modal
+      
+        var specID = "";
+        var uniqueNotes = [];
+        var notesToModal = "";
+//////////////////////////////////////////////////////////////////////////////////////////////       
+function displayNotes(newstrackerdata) {
+    newstrackerdata.forEach(function (newsdata) {
+        if (specID === newsdata._id) {
+            uniqueNotes.push(newsdata.notes);
+            
+            while( (i = uniqueNotes.shift()) !== undefined ) {
+                for (j = 0; j < i.length; j++) { 
+    var multipleNotes = i[j] + "<br>";
+$(".notes-from-mongo").append(multipleNotes);
+                }
+    console.log(i);
+            }
+        }
+        });
+        };
+//////////////////////////////////////////////////////////////////////////////////////////////         
         
 $(".myBtn").click(function() {
     modal.style.display = "block";
-    var specID = $(this).attr("data-mongo-id");
+$.getJSON("/all", function (data) {
+    displayNotes(data);
+});
+    specID = $(this).attr("data-mongo-id");
+        
+    var noteDisp = '<div class="temp-form"><textarea id="note" style="width:100%"></textarea> <input type="button" value="Submit" class="noteSubmit" data-mongo-id="' + specID + '"><p class="notes-from-mongo"></p></div>';
+    $(".modal-content").append(noteDisp);    
     console.log(specID);
-    var noteDisp = '<div class="temp-form"><textarea id="note" style="width:100%"></textarea> <input type="button" value="Submit" class="noteSubmit" data-mongo-id="' + specID + '"></div>';
-    $(".modal-content").append(noteDisp);
     });
+        
+$("#del-art").click(function() {
+    var newNoteID = $(this).attr("data-mongo-id");
+    var newNoteObj = {
+        newNoteID: newNoteID
+    }
+        var currentURL = window.location.origin;
+    $.post(currentURL + "/api/friends", newNoteObj, function (data) {
+    }); 
+        $.ajax({
+        url: '/delart',
+        type: 'PUT'
+    })
+  });      
     
 //btn.onclick = function() {
 //    modal.style.display = "block";
@@ -89,6 +130,7 @@ $(".myBtn").click(function() {
 span.onclick = function() {
     modal.style.display = "none";
     $(".temp-form").remove();
+    uniqueNotes = [];
 }
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -98,7 +140,7 @@ window.onclick = function(event) {
 }
 }, 1000);
 </script>      
-     <script src="app.js"></script> 
+           <script src="app.js"></script> 
 
   </body>
 </html>
