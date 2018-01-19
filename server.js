@@ -1,126 +1,119 @@
-// Dependencies
 var express = require("express");
 var mongojs = require("mongojs");
-// Require request and cheerio. This makes the scraping possible
 var request = require("request");
 var cheerio = require("cheerio");
 var ObjectID = require("mongodb").ObjectID;
-
-// Initialize Express
 var app = express();
-
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
-
 app.use(express.static("public"));
-// Database configuration
 var databaseUrl = "newstrackerdb";
 var collections = ["newstrackerdata"];
-
-// Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
-
 db.on("error", function(error) {
-  console.log("Database Error:", error);
+    console.log("Database Error:", error);
 });
-
 require("./routing/apiRoutes")(app);
-
-// Retrieve data from the db
+///////////////////////////////////////////////////////////////////////////////////////////
 app.get("/all", function(req, res) {
-  // Find all results from the newstrackerdata collection in the db
-  db.newstrackerdata.find({}, function(error, found) {
-    // Throw any errors to the console
-    if (error) {
-      console.log(error);
-    }
-    // If there are no errors, send the data to the browser as json
-    else {
-      res.json(found);
-    }
-  });
-});
-
-//----------------------------------------------------------------------------------------------------------------------
-app.get("/scrape", function(req, res) {
-request("https://www.nytimes.com/section/us", function(error, response, html) {
-
-  var $ = cheerio.load(html);
-
-  var results = [];
-
-  $("h2.headline").each(function(i, element) {
-
-    var title = $(element).text().trim();
-    var summary = $(element).siblings('.summary').text().trim();
-    var link = $(element).children().attr("href");
-
-      if (link === undefined) {
-
-      link = $(element).closest("a").attr("href");
-    }
-
-      if (title && summary && link) {
-db.newstrackerdata.update({
-    title: title},
-   {title: title,
-      summary: summary,
-      link: link},
-   {upsert: true},
-        function(err, inserted) {
-          if (err) {
-            console.log(err);
-          }
-          else {
-            console.log(inserted);
-          }
-        });
-      }
+    db.newstrackerdata.find({}, function(error, found) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.json(found);
+//            console.log(found);
+        }
     });
-  });
-  res.send("Scrape Complete");
 });
-//----------------------------------------------------------------------------------------------------------------------
-////////////////////////////////////////////////////////////////////////////////////////
-//var idInsert = '5a5c52f821052f496b512070';
-var friends = require("./data/friends");
-var idInsert = "";
-var noteInsert = "";
-app.put("/notepost", function () {
-    idInsert = friends[0].newNoteID;
-    noteInsert = friends[0].currentNote;
-    db.newstrackerdata.update({_id: ObjectID(idInsert)}, {$push: {notes: noteInsert}},
-        function(err, inserted) {
-          if (err) {
-            // Log the error if one is encountered during the query
+///////////////////////////////////////////////////////////////////////////////////////////
+var tempScraped = require("./data/tempScraped");
+app.get("/scrape", function(req, res) {
+    request("https://www.nytimes.com/section/us", function(error, response, html) {
+        var $ = cheerio.load(html);
+        var results = [];
+        $("h2.headline").each(function(i, element) {
+            var title = $(element).text().trim();
+            var summary = $(element).siblings('.summary').text().trim();
+            var link = $(element).children().attr("href");
+            if (link === undefined) {
+                link = $(element).closest("a").attr("href");
+            }
+            var newScrapeObj = {
+                title: title,
+                summary: summary,
+                link: link
+            }
+            tempScraped.push(newScrapeObj);
+        });
+    });
+    res.send("Scrape Complete");
+});
+///////////////////////////////////////////////////////////////////////////////////////////
+var saveArticle = require("./data/saveArticle");
+//var title2 = "";
+//var summary2 = "";
+//var link2 = "";
+app.post("/dbArtSave", function(data) {
+    title2 = data.body.saveTitle;
+    summary2 = data.body.saveSum;
+    link2 = data.body.saveLink;
+    db.newstrackerdata.update({
+        link: link2
+    }, {
+        title: title2,
+        summary: summary2,
+        link: link2
+    }, {
+        upsert: true
+    }, function(err, inserted) {
+        if (err) {
             console.log(err);
-          }
-          else {
-            // Otherwise, log the inserted data
+        } else {
             console.log(inserted);
-          }
-        });
+        }
+    });
 });
-////////////////////////////////////////////////////////////////////////////////////////
-
-app.put("/delart", function () {
-    idInsert = friends[0].newNoteID;
-    db.newstrackerdata.remove({_id: ObjectID(idInsert)}, function(err, deleted) {
-          if (err) {
-            // Log the error if one is encountered during the query
+///////////////////////////////////////////////////////////////////////////////////////////
+var friends = require("./data/friends");
+//var idInsert = "";
+//var noteInsert = "";
+app.post("/notepost", function(data) {
+    var idInsert = data.body.newNoteID;
+    var noteInsert = data.body.currentNote;
+    db.newstrackerdata.update({
+        _id: ObjectID(idInsert)
+    }, {
+        $push: {
+            notes: noteInsert
+        }
+    }, function(err, inserted) {
+        if (err) {
             console.log(err);
-          }
-          else {
-            // Otherwise, log the inserted data
-            console.log(deleted);
-          }
-        });
+        } else {
+            console.log(inserted);
+        }
+    });
 });
-
-// Listen on port 3000
+///////////////////////////////////////////////////////////////////////////////////////////
+var deleteArticle = require("./data/deleteArticle");
+app.post("/delart", function(data) {
+//    idInsert = deleteArticle[0].newNoteID;
+    var delIDString = data.body.newNoteID;
+    console.log(delIDString);
+    db.newstrackerdata.remove({
+        _id: ObjectID(delIDString)
+    }, function(err, deleted) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(deleted);
+        }
+    });
+});
+///////////////////////////////////////////////////////////////////////////////////////////
 app.listen(3000, function() {
-  console.log("App running on port 3000!");
+    console.log("App running on port 3000!");
 });

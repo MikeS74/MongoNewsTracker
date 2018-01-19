@@ -4,59 +4,26 @@
     <meta charset="UTF-8">
     <title>News Tracker</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="style.css">
-
-<style>
-/* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-/* Modal Content */
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
-/* The Close Button */
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-</style>
-
 </head>
 <body>
+
+
     <input type="button" value="SCRAPE ARTICLES" id="scrape-btn">
+    <input type="button" value="SAVED ARTICLES" id="saved-art-btn">
     
-             <div id="list-view"></div> 
-      
-    <div id="no-art"><p class="no-art"></p></div>
 <!-- Trigger/Open The Modal -->
 <!--<button id="myBtn">Open Modal</button>-->
 
+             <div id="list-view"></div> 
+      
+    <div id="no-art"><p class="no-art"></p></div>
+    
 <!-- The Modal -->
 <div id="myModal" class="modal">
   <!-- Modal content -->
@@ -64,24 +31,18 @@
     <span class="close">&times;</span>
   </div>
 </div>
-    
 <script>
 
     $( document ).ready(function() {
     console.log( "ready!" );
-                if ( $('#list-view').text().length == 0 ) {
-	$('.no-art').text("Looks like we don't have any new articles.");
-}
+                  $(".list-gen").hide();      
+    if ( $(".scrape-list-gen").length === 0 ) 
+    {$('.no-art').text("Looks like we don't have any new articles.");} 
+    
 });
     
-     $("#scrape-btn").click(function() {       
-    $.ajax({
-        url: '/scrape',
-        type: 'GET'
-    })
-         location.reload();
-     });
-    
+         
+
 
 // Get the modal
 var modal = document.getElementById('myModal');
@@ -113,16 +74,21 @@ $(".notes-from-mongo").append(multipleNotes);
 	$('.notes-from-mongo').text("No notes for this article yet.");
 }
         };
-//////////////////////////////////////////////////////////////////////////////////////////////         
-     setTimeout(function(){       
+//////////////////////////////////////////////////////////////////////////////////////////////
+    function artNotesBtn() {
+        setTimeout(function(){    
 $(".myBtn").click(function() {
     modal.style.display = "block";
         $(".temp-form").remove();
     uniqueNotes = [];
     $('.notes-from-mongo').text("");
-$.getJSON("/all", function (data) {
-    displayNotes(data);
-});
+//$.get("/all", function (data) {
+//    displayNotes(data);
+//});
+    $.ajax({ dataType: "json", url: "/all", method: "GET" })
+      .done(function(data) {
+        displayNotes(data);
+    });
     specID = $(this).attr("data-mongo-id");
         
     var noteDisp = '<div class="temp-form"><textarea id="note" style="width:100%"></textarea> <input type="button" value="Submit" class="noteSubmit" data-mongo-id="' + specID + '"><p class="notes-from-mongo"></p></div>';
@@ -130,21 +96,25 @@ $.getJSON("/all", function (data) {
     console.log(specID);
     });
         
-$("#del-art").click(function() {
+$(".del-art").click(function() {
     var newNoteID = $(this).attr("data-mongo-id");
+    console.log(newNoteID + "this should be the ID");
     var newNoteObj = {
         newNoteID: newNoteID
     }
-        var currentURL = window.location.origin;
-    $.post(currentURL + "/api/friends", newNoteObj, function (data) {
-    }); 
+//        var currentURL = window.location.origin;
+//    $.post("/api/deleteArticle", newNoteObj, function (data) {
+//    }); 
         $.ajax({
-        url: '/delart',
-        type: 'PUT'
+            dataType: "json",
+        url: "/delart",
+            data: newNoteObj,
+        type: "POST"
     })
     $(this).closest(".list-gen").remove();
   });      
-    
+    }, 1000);
+    }
 //btn.onclick = function() {
 //    modal.style.display = "block";
 //}
@@ -160,7 +130,7 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
-}, 1000);
+
 </script>      
            <script src="app.js"></script> 
 
