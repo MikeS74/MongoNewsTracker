@@ -56,15 +56,18 @@ app.post("/dbArtSave", function(data) {
     title2 = data.body.saveTitle;
     summary2 = data.body.saveSum;
     link2 = data.body.saveLink;
-    db.newstrackerdata.update({
-        link: link2
-    }, {
+    
+    db.newstrackerdata.update(
+        {title: title2},
+        {$set: {
         title: title2,
         summary: summary2,
         link: link2
-    }, {
-        upsert: true
-    }, function(err, inserted) {
+    }},
+   {
+     upsert: true
+   }
+, function(err, inserted) {
         if (err) {
             console.log(err);
         } else {
