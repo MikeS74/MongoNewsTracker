@@ -52,10 +52,6 @@ app.get("/scrape", function(req, res) {
     res.send("Scrape Complete");
 });
 ///////////////////////////////////////////////////////////////////////////////////////////
-var saveArticle = require("./data/saveArticle");
-//var title2 = "";
-//var summary2 = "";
-//var link2 = "";
 app.post("/dbArtSave", function(data) {
     title2 = data.body.saveTitle;
     summary2 = data.body.saveSum;
@@ -77,9 +73,6 @@ app.post("/dbArtSave", function(data) {
     });
 });
 ///////////////////////////////////////////////////////////////////////////////////////////
-var friends = require("./data/friends");
-//var idInsert = "";
-//var noteInsert = "";
 app.post("/notepost", function(data) {
     var idInsert = data.body.newNoteID;
     var noteInsert = data.body.currentNote;
@@ -98,7 +91,6 @@ app.post("/notepost", function(data) {
     });
 });
 ///////////////////////////////////////////////////////////////////////////////////////////
-var deleteArticle = require("./data/deleteArticle");
 app.post("/delart", function(data) {
 //    idInsert = deleteArticle[0].newNoteID;
     var delIDString = data.body.newNoteID;

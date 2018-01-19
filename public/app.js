@@ -2,7 +2,7 @@
 $("#scrape-btn").click(function() {
          $(".list-gen").remove();
     $.ajax({
-        url: currentURL + "/scrape",
+        url: "/scrape",
         type: 'GET'
     })
                  setTimeout(function(){
