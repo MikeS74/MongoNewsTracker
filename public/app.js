@@ -11,14 +11,10 @@ $.get("/api/tempScraped", function(data){
     for (var i = 0; i < data.length; i++) {
 
         var freshScrape = data[i];
-//    console.log(freshScrape);
         var listDiv = $("<div class='scrape-list-gen'>");
         var dispScrape = '<a id="scrape-link" href="' + freshScrape.link + '" style="color: black; text-decoration: none"><p id="scrape-title">' + freshScrape.title + '</p>' + '<p id="scrape-sum">' + freshScrape.summary + '</p></a><input type="button" value="SAVE ARTICLE" class="save-art">';
         listDiv.append(dispScrape);
         $("#list-view").append(listDiv);
-//               if (i === 19) {
-//        break;
-//    } 
     }
     $(".save-art").click(function() {
     var saveLink = $(this).closest(".scrape-list-gen").find("a").attr("href");
@@ -30,9 +26,6 @@ $.get("/api/tempScraped", function(data){
                 saveSum: saveSum
     }
             console.log(saveArtObj);
-//            $.post("/api/saveArticle", saveArtObj, function (data) {
-//        
-//    });
         $.ajax({
             dataType: "json",
         url: "/dbArtSave",
@@ -49,7 +42,6 @@ $.get("/api/tempScraped", function(data){
 
 
 
-// DISPLAYING SAVED ARTICLES FROM MONGO
 function displayResults(newstrackerdata) {
     
     newstrackerdata.forEach(function (newsdata) {
@@ -61,27 +53,19 @@ function displayResults(newstrackerdata) {
     });
 }
 
-//var dispSaved = '$.getJSON("/all", function (data){displayResults(data);});';
-//eval(dispSaved);
 $("#saved-art-btn").on("click", function () {
-//    $(".list-gen").remove();
 $('#list-view').load(document.URL +  ' #list-view');
     artNotesBtn();
-//$.get("/all", function (data){
-//    displayResults(data);
-//});
         $.ajax({ dataType: "json", url: "/all", method: "GET" })
       .done(function(data) {
         displayResults(data);
             console.log(data);
     });
-//                $(".list-gen").show();
         $(".scrape-list-gen").remove();
     $('.no-art').text(" ");
     
     });
 
-///////////////////////////////////////////////////////////////////////////////////////
 var modal = document.getElementById('myModal');
 $(".modal-content").on("click", ".noteSubmit", function () {
     var currentNote = $("#note").val().trim();
@@ -91,10 +75,6 @@ $(".modal-content").on("click", ".noteSubmit", function () {
         currentNote: currentNote
     }
  
-
-//    $.post("/api/friends", newNoteObj, function (data) {
-//        
-//    });   
     console.log(newNoteObj);
     
         $.ajax({
@@ -104,4 +84,3 @@ $(".modal-content").on("click", ".noteSubmit", function () {
     })
     modal.style.display = "none";
 });
-///////////////////////////////////////////////////////////////////////////////////////

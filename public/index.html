@@ -17,16 +17,12 @@
     <input type="button" value="SCRAPE ARTICLES" id="scrape-btn">
     <input type="button" value="SAVED ARTICLES" id="saved-art-btn">
     
-<!-- Trigger/Open The Modal -->
-<!--<button id="myBtn">Open Modal</button>-->
 
              <div id="list-view"></div> 
       
     <div id="no-art"><p class="no-art"></p></div>
     
-<!-- The Modal -->
 <div id="myModal" class="modal">
-  <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
   </div>
@@ -44,18 +40,13 @@
          
 
 
-// Get the modal
 var modal = document.getElementById('myModal');
-// Get the button that opens the modal
 var btn = document.getElementsByClassName("myBtn");
-// Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
-// When the user clicks the button, open the modal
       
         var specID = "";
         var uniqueNotes = [];
         var notesToModal = "";
-//////////////////////////////////////////////////////////////////////////////////////////////       
 function displayNotes(newstrackerdata) {
     newstrackerdata.forEach(function (newsdata) {
         if (specID === newsdata._id) {
@@ -74,7 +65,6 @@ $(".notes-from-mongo").append(multipleNotes);
 	$('.notes-from-mongo').text("No notes for this article yet.");
 }
         };
-//////////////////////////////////////////////////////////////////////////////////////////////
     function artNotesBtn() {
         setTimeout(function(){    
 $(".myBtn").click(function() {
@@ -82,9 +72,6 @@ $(".myBtn").click(function() {
         $(".temp-form").remove();
     uniqueNotes = [];
     $('.notes-from-mongo').text("");
-//$.get("/all", function (data) {
-//    displayNotes(data);
-//});
     $.ajax({ dataType: "json", url: "/all", method: "GET" })
       .done(function(data) {
         displayNotes(data);
@@ -102,9 +89,6 @@ $(".del-art").click(function() {
     var newNoteObj = {
         newNoteID: newNoteID
     }
-//        var currentURL = window.location.origin;
-//    $.post("/api/deleteArticle", newNoteObj, function (data) {
-//    }); 
         $.ajax({
             dataType: "json",
         url: "/delart",
@@ -115,16 +99,10 @@ $(".del-art").click(function() {
   });      
     }, 1000);
     }
-//btn.onclick = function() {
-//    modal.style.display = "block";
-//}
-        
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
 
 }
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";

@@ -17,18 +17,15 @@ db.on("error", function(error) {
     console.log("Database Error:", error);
 });
 require("./routing/apiRoutes")(app);
-///////////////////////////////////////////////////////////////////////////////////////////
 app.get("/all", function(req, res) {
     db.newstrackerdata.find({}, function(error, found) {
         if (error) {
             console.log(error);
         } else {
             res.json(found);
-//            console.log(found);
         }
     });
 });
-///////////////////////////////////////////////////////////////////////////////////////////
 var tempScraped = require("./data/tempScraped");
 app.get("/scrape", function(req, res) {
     request("https://www.nytimes.com/section/us", function(error, response, html) {
@@ -51,7 +48,6 @@ app.get("/scrape", function(req, res) {
     });
     res.send("Scrape Complete");
 });
-///////////////////////////////////////////////////////////////////////////////////////////
 app.post("/dbArtSave", function(data) {
     title2 = data.body.saveTitle;
     summary2 = data.body.saveSum;
@@ -75,7 +71,6 @@ app.post("/dbArtSave", function(data) {
         }
     });
 });
-///////////////////////////////////////////////////////////////////////////////////////////
 app.post("/notepost", function(data) {
     var idInsert = data.body.newNoteID;
     var noteInsert = data.body.currentNote;
@@ -93,9 +88,7 @@ app.post("/notepost", function(data) {
         }
     });
 });
-///////////////////////////////////////////////////////////////////////////////////////////
 app.post("/delart", function(data) {
-//    idInsert = deleteArticle[0].newNoteID;
     var delIDString = data.body.newNoteID;
     console.log(delIDString);
     db.newstrackerdata.remove({
@@ -108,7 +101,6 @@ app.post("/delart", function(data) {
         }
     });
 });
-///////////////////////////////////////////////////////////////////////////////////////////
 app.listen(3000, function() {
     console.log("App running on port 3000!");
 });
