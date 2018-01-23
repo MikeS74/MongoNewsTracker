@@ -9,7 +9,7 @@ $("#scrape-btn").click(function() {
                  setTimeout(function(){
 
 $.get("/api/tempScraped", function(data){
-                     
+                         
     for (var i = 0; i < data.length; i++) {
 
         var freshScrape = data[i];
@@ -19,10 +19,7 @@ $.get("/api/tempScraped", function(data){
         $("#list-view").append(listDiv);
     }
     $(".save-art").click(function() {
-//        $( this ).fadeToggle( "fast", function() {
-    // Animation complete.
             $( this ).html('<i class="material-icons">done</i>SAVED!');
-//  });
     var saveLink = $(this).closest(".scrape-list-gen").find("a").attr("href");
         var saveTitle = $(this).closest(".scrape-list-gen").find("#scrape-title").text();
         var saveSum = $(this).closest(".scrape-list-gen").find("#scrape-sum").text();
