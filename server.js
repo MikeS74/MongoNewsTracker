@@ -10,13 +10,18 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
+
 var databaseUrl = "newstrackerdb";
 var collections = ["newstrackerdata"];
 var db = mongojs(databaseUrl, collections);
 db.on("error", function(error) {
     console.log("Database Error:", error);
 });
+
 require("./routing/apiRoutes")(app);
+
+
+
 app.get("/all", function(req, res) {
     db.newstrackerdata.find({}, function(error, found) {
         if (error) {

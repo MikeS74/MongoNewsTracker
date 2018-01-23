@@ -8,32 +8,48 @@
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+      <link href="https://fonts.googleapis.com/css?family=Cabin:400,600,700|Francois+One|Lato:400,700,900|Ropa+Sans" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 
+    <div class="background">
+        </div>
+<header>
+    <div class="container">
+        <a href="/index.html" style="text-decoration: none"><img id="logo" src="img/tnt-logo02.png" alt="Top News Tracker"></a>
+    <div class="header-buttons">
     <input type="button" value="SCRAPE ARTICLES" id="scrape-btn">
+    <br><br>
     <input type="button" value="SAVED ARTICLES" id="saved-art-btn">
+        </div>
+        </div>
+    </header>
     
-
              <div id="list-view"></div> 
-      
     <div id="no-art"><p class="no-art"></p></div>
+      
     
 <div id="myModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
+      <div><p id="thisTitle"></p><hr><br></div>
   </div>
 </div>
 <script>
 
     $( document ).ready(function() {
     console.log( "ready!" );
-                  $(".list-gen").hide();      
+//                  $(".list-gen").hide();      
     if ( $(".scrape-list-gen").length === 0 ) 
-    {$('.no-art').text("Looks like we don't have any new articles.");} 
+    {
+        $('.no-art').text("Looks you don't have any new articles yet.");
+    } 
     
 });
     
@@ -47,6 +63,7 @@ var span = document.getElementsByClassName("close")[0];
         var specID = "";
         var uniqueNotes = [];
         var notesToModal = "";
+        var thisTitle = "";
 function displayNotes(newstrackerdata) {
     newstrackerdata.forEach(function (newsdata) {
         if (specID === newsdata._id) {
@@ -54,11 +71,13 @@ function displayNotes(newstrackerdata) {
             
             while( (i = uniqueNotes.shift()) !== undefined ) {
                 for (j = 0; j < i.length; j++) { 
-    var multipleNotes = i[j] + "<br>";
+    var multipleNotes = '<p class="notes-from-mongo2">' + i[j] + '</p>';
 $(".notes-from-mongo").append(multipleNotes);
                 }
     console.log(i);
             }
+        thisTitle = newsdata.title;
+        $("#thisTitle").append(thisTitle);
         }
         });
     if ( $('.notes-from-mongo').text().length == 0 ) {
@@ -70,6 +89,7 @@ $(".notes-from-mongo").append(multipleNotes);
 $(".myBtn").click(function() {
     modal.style.display = "block";
         $(".temp-form").remove();
+
     uniqueNotes = [];
     $('.notes-from-mongo').text("");
     $.ajax({ dataType: "json", url: "/all", method: "GET" })
@@ -78,7 +98,7 @@ $(".myBtn").click(function() {
     });
     specID = $(this).attr("data-mongo-id");
         
-    var noteDisp = '<div class="temp-form"><textarea id="note" style="width:100%"></textarea> <input type="button" value="Submit" class="noteSubmit" data-mongo-id="' + specID + '"><p class="notes-from-mongo"></p></div>';
+    var noteDisp = '<div class="temp-form"><p class="notes-from-mongo"></p><textarea id="note" style="width:90%"></textarea><br> <input type="button" value="SUBMIT" class="noteSubmit" data-mongo-id="' + specID + '"></div>';
     $(".modal-content").append(noteDisp);    
     console.log(specID);
     });
@@ -101,7 +121,7 @@ $(".del-art").click(function() {
     }
 span.onclick = function() {
     modal.style.display = "none";
-
+    $("#thisTitle").text(" ");
 }
 window.onclick = function(event) {
     if (event.target == modal) {
@@ -111,6 +131,7 @@ window.onclick = function(event) {
 
 </script>      
            <script src="app.js"></script> 
+        
 
   </body>
 </html>

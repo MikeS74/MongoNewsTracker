@@ -1,9 +1,182 @@
+body {
+    margin: 0;
+    background-color: #9a9a9a;
+/*
+    background: url("img/newstracker-bkgd.png");
+    background-size: cover;
+    
+*/
+/*
+font-family: 'Francois One', 'Ropa Sans', 'Cabin', 'Lato', sans-serif;
+    color: grey
+*/
+}
+
+.background {
+    z-index: 0;
+    position: fixed;
+    width: 100%;
+    height: 680px;
+    background: linear-gradient(to bottom,rgba(169, 169, 169, 0.65),#9a9a9a), url("img/newstracker-bkgd.png"); 
+    background-size: cover;
+/*        position: relative;*/
+/*    top: 100px;*/
+}
+
+header {
+    z-index: 2;
+position: fixed;
+    top: 0;
+    border-bottom: solid;
+    border-color: #212121;
+    width: 100%;
+   height: 100px; 
+background: linear-gradient(black, #363636, rgb(78, 78, 78)); 
+background-size: cover;
+}
+
+#logo {
+    position: absolute;
+    top: 15px;
+        height: 80px
+}
+
+.header-buttons {
+    width: 175px;
+    height: 100px;
+position: relative;
+    top: 15px;
+    margin-left: auto;
+
+}
+
+.container {
+ width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input {
+    font-family: 'Ropa Sans', sans-serif;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #2a2a2a;
+    font-size: 18px;
+    border-color: #89bcff;
+    border-width: 2px;
+    background-color: white;
+    height: 30px;
+    width: 175px;
+    cursor: pointer
+}
+
+#no-art {
+    position: relative;
+    top: 250px;
+    width: 450px;
+    margin: 0 auto 0 auto;
+    background: white;
+    height: 95px;
+    padding: 5px;
+    border: solid;
+    border-width: 1px;
+    border-color: #5b768d;
+    font-family: 'Ropa Sans', sans-serif;
+    color: #717171;
+    font-size: 18px;
+    font-weight: 900;
+    text-align: center;
+}
+
+.no-art {
+    position: relative;
+    top: 35px
+}
+
+#list-view {
+    z-index: 1;
+    position: relative;
+    top: 100px;
+    width: 750px;
+    margin: 0 auto 0 auto;
+    background: white;
+/*
+    overflow-y:scroll;
+    height: 460px;
+*/
+}
+
+.scrape-list-gen, .list-gen {
+height: 95px;
+    padding: 5px;
+    border: solid;
+    border-width: 1px;
+    border-bottom: none;
+    border-color: #5b768d
+}
+
+#scrape-title, #thisTitle {
+        width: 575px;
+    font-family: 'Francois One', sans-serif;
+    color: #475d6f;
+    padding: 0 5px 0 5px;
+    margin: 5px 0 0 0;
+}
+
+#scrape-sum {
+        width: 575px;
+    height: 45px;
+font-family: 'Ropa Sans', sans-serif;
+    color: #717171;
+    padding: 5px
+}
+
+.save-art, .myBtn, .del-art {
+    position: relative;
+    top: 10px;
+    cursor: pointer;
+    font-family: 'Ropa Sans', sans-serif;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #717171;
+    font-size: 13px;
+}
+
+.side-options {
+    height: 70px;
+position: relative;
+    bottom: 80px;
+    margin-left: auto;
+    width: 140px;
+background-color: rgb(244, 235, 211);
+    padding-left: 5px;
+  }
+
+.material-icons {
+    font-size: 12px;
+    position: relative;
+    top: 2px;
+    font-weight: 900;
+    margin-right: 2px
+}
+
+hr { 
+    display:block;
+    border:none;
+    color:white;
+    height:1px;
+    background:black;
+    background: -webkit-gradient(radial, 0 50%, 0, 80% 50%, 1, from(#969696), to(#fff));
+}
+
+/*
 button {
   width: 250px;
   height: 50px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
+*/
 
 .active {
   color: red;
@@ -13,23 +186,29 @@ button {
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 3; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
+/*
+    margin-left: auto;
+    margin-right: auto;
+*/
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 /* Modal Content */
 .modal-content {
+        font-family: 'Ropa Sans', sans-serif;
+    color: #717171;
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 60%;
 }
 /* The Close Button */
 .close {
@@ -44,5 +223,24 @@ button {
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+.notes-from-mongo {
+    margin-bottom: 20px;
+    width: 90%;
+}
+
+.notes-from-mongo2 {
+
+    color: #717171;
+    padding: 5px;
+    margin: 0 0 10px 0;
+    background-color: #e8e8e8;
+}
+
+.noteSubmit {
+    margin: 10px 0 5px 0;
+    font-size: 13px;
+    width: auto;
 }
 
