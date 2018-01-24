@@ -27,10 +27,14 @@
                 <input type="button" value="SAVED ARTICLES" id="saved-art-btn"> </div>
         </div>
     </header>
+    
+<!--Main area where all articles will be displayed-->
     <div id="list-view"></div>
     <div id="no-art">
         <p class="no-art"></p>
     </div>
+    
+<!--Modal content-->
     <div id="myModal" class="modal">
         <div class="modal-content"> <span class="close">&times;</span>
             <div>
@@ -40,7 +44,9 @@
             </div>
         </div>
     </div>
+    
     <script>
+//Display message if there are no articles
         $(document).ready(function() {
             console.log("ready!");
             if ($(".scrape-list-gen").length === 0) {
@@ -50,11 +56,13 @@
         var modal = document.getElementById('myModal');
         var btn = document.getElementsByClassName("myBtn");
         var span = document.getElementsByClassName("close")[0];
+        
         var specID = "";
         var uniqueNotes = [];
         var notesToModal = "";
         var thisTitle = "";
 
+//Display notes retrieved from database for specific article clicked on
         function displayNotes(newstrackerdata) {
             newstrackerdata.forEach(function(newsdata) {
                 if (specID === newsdata._id) {
@@ -74,6 +82,7 @@
             }
         };
 
+//Create buttons, fields and notes in modal content for each article clicked on
         function artNotesBtn() {
             setTimeout(function() {
                 $(".myBtn").click(function() {
@@ -107,6 +116,8 @@
                 });
             }, 1000);
         }
+        
+//Close modal
         span.onclick = function() {
             modal.style.display = "none";
             $("#thisTitle").text(" ");

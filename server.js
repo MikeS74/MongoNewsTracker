@@ -5,22 +5,33 @@ var cheerio = require("cheerio");
 var ObjectID = require("mongodb").ObjectID;
 var app = express();
 var bodyParser = require("body-parser");
+
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
+
+//Local Mongo setup==========================
 //var databaseUrl = "newstrackerdb";
 //var collections = ["newstrackerdata"];
 //var db = mongojs(databaseUrl, collections);
+//===========================================
+
+//Remote Mongo setup
 var db = mongojs('admin:freshchoice1@ds213338.mlab.com:13338/heroku_wkx8w430', ['newstrackerdata']);
 db.on("error", function(error) {
     console.log("Database Error:", error);
 });
+
 require("./routing/apiRoutes")(app);
+
+//Home page route
 app.get("/", function(req, res) {
     res.sendFile(path.join(__dirname, "./public/index.html"));
 });
+
+//Retrieve all Mongo collection data
 app.get("/all", function(req, res) {
     db.newstrackerdata.find({}, function(error, found) {
         if (error) {
@@ -30,6 +41,8 @@ app.get("/all", function(req, res) {
         }
     });
 });
+
+//Cheerio scrape of New York Times then push to API route
 var tempScraped = require("./data/tempScraped");
 app.get("/scrape", function(req, res) {
     request("https://www.nytimes.com/section/us", function(error, response, html) {
@@ -52,6 +65,8 @@ app.get("/scrape", function(req, res) {
     });
     res.send("Scrape Complete");
 });
+
+//Save an article to the database from the front-end
 app.post("/dbArtSave", function(data) {
     title2 = data.body.saveTitle;
     summary2 = data.body.saveSum;
@@ -74,6 +89,8 @@ app.post("/dbArtSave", function(data) {
         }
     });
 });
+
+//Save a note for articles already saved in database
 app.post("/notepost", function(data) {
     var idInsert = data.body.newNoteID;
     var noteInsert = data.body.currentNote;
@@ -91,6 +108,8 @@ app.post("/notepost", function(data) {
         }
     });
 });
+
+//Delete notes that correspond to articles already saved in database
 app.post("/notedel", function(data) {
     var xID = data.body.xID;
     var noteText = data.body.noteText;
@@ -112,6 +131,8 @@ app.post("/notedel", function(data) {
         }
     });
 });
+
+//Delete articles already saved in database
 app.post("/delart", function(data) {
     var delIDString = data.body.newNoteID;
     db.newstrackerdata.remove({
@@ -124,9 +145,7 @@ app.post("/delart", function(data) {
         }
     });
 });
-//app.listen(3000, function() {
-//    console.log("App running on port 3000!");
-//});
+
 var PORT = process.env.PORT || 8080;
 
 app.listen(PORT, function() {

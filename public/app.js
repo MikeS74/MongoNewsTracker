@@ -1,4 +1,6 @@
  var currentURL = window.location.origin;
+
+//Perform scrape and show results from API route
  $("#scrape-btn").click(function() {
      $(".list-gen").remove();
      $("#no-art").hide();
@@ -36,6 +38,7 @@
      }, 500);
  });
 
+//Display articles retrieved from database
  function displayResults(newstrackerdata) {
      newstrackerdata.forEach(function(newsdata) {
          var listDiv = $("<div class='list-gen'>");
@@ -61,6 +64,8 @@
      $(".scrape-list-gen").remove();
      $("#no-art").hide();
  });
+
+//Submit a note in modal for current article selected
  var modal = document.getElementById('myModal');
  $(".modal-content").on("click", ".noteSubmit", function() {
      var currentNote = $("#note").val().trim();
@@ -77,6 +82,8 @@
      modal.style.display = "none";
      $("#thisTitle").text(" ");
  });
+
+//Delete article notes displayed in modal
  $(".modal-content").on("click", ".x", function() {
      var xID = $(this).attr("data-mongo-id");
      var noteText = $(this).siblings("p").text();
