@@ -10,9 +10,10 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
-var databaseUrl = "newstrackerdb";
-var collections = ["newstrackerdata"];
-var db = mongojs(databaseUrl, collections);
+//var databaseUrl = "newstrackerdb";
+//var collections = ["newstrackerdata"];
+//var db = mongojs(databaseUrl, collections);
+var db = mongojs('admin:freshchoice1@ds213338.mlab.com:13338/heroku_wkx8w430', ['newstrackerdata']);
 db.on("error", function(error) {
     console.log("Database Error:", error);
 });
