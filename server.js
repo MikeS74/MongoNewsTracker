@@ -10,18 +10,16 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
-
 var databaseUrl = "newstrackerdb";
 var collections = ["newstrackerdata"];
 var db = mongojs(databaseUrl, collections);
 db.on("error", function(error) {
     console.log("Database Error:", error);
 });
-
 require("./routing/apiRoutes")(app);
-
-
-
+app.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname, "/public/index.html"));
+});
 app.get("/all", function(req, res) {
     db.newstrackerdata.find({}, function(error, found) {
         if (error) {
@@ -57,18 +55,17 @@ app.post("/dbArtSave", function(data) {
     title2 = data.body.saveTitle;
     summary2 = data.body.saveSum;
     link2 = data.body.saveLink;
-    
-    db.newstrackerdata.update(
-        {title: title2},
-        {$set: {
-        title: title2,
-        summary: summary2,
-        link: link2
-    }},
-   {
-     upsert: true
-   }
-, function(err, inserted) {
+    db.newstrackerdata.update({
+        title: title2
+    }, {
+        $set: {
+            title: title2,
+            summary: summary2,
+            link: link2
+        }
+    }, {
+        upsert: true
+    }, function(err, inserted) {
         if (err) {
             console.log(err);
         } else {
@@ -84,6 +81,28 @@ app.post("/notepost", function(data) {
     }, {
         $push: {
             notes: noteInsert
+        }
+    }, function(err, inserted) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(inserted);
+        }
+    });
+});
+app.post("/notedel", function(data) {
+    var xID = data.body.xID;
+    var noteText = data.body.noteText;
+    var textArray = [];
+    textArray.push(noteText);
+    console.log(textArray);
+    db.newstrackerdata.update({
+        _id: ObjectID(xID)
+    }, {
+        $pull: {
+            notes: {
+                $in: textArray
+            }
         }
     }, function(err, inserted) {
         if (err) {
