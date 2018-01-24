@@ -64,7 +64,6 @@
                             var multipleNotes = '<div class="notes-from-mongo2"><p style="display:inline">' + i[j] + '</p><p class="x" data-mongo-id="' + newsdata._id + '">[X]</p></div>';
                             $(".notes-from-mongo").append(multipleNotes);
                         }
-                        console.log(i);
                     }
                     thisTitle = newsdata.title;
                     $("#thisTitle").append(thisTitle);
@@ -92,11 +91,9 @@
                     specID = $(this).attr("data-mongo-id");
                     var noteDisp = '<div class="temp-form"><p class="notes-from-mongo"></p><textarea id="note" style="width:90%"></textarea><br><input type="button" value="SUBMIT" class="noteSubmit" data-mongo-id="' + specID + '"></div>';
                     $(".modal-content").append(noteDisp);
-                    console.log(specID);
                 });
                 $(".del-art").click(function() {
                     var newNoteID = $(this).attr("data-mongo-id");
-                    console.log(newNoteID + "this should be the ID");
                     var newNoteObj = {
                         newNoteID: newNoteID
                     }

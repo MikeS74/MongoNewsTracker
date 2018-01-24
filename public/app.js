@@ -11,7 +11,7 @@
              for (var i = 0; i < data.length; i++) {
                  var freshScrape = data[i];
                  var listDiv = $("<div class='scrape-list-gen'>");
-                 var dispScrape = '<a id="scrape-link" href="' + freshScrape.link + '" style="text-decoration: none"><p id="scrape-title">' + freshScrape.title + '</p><hr>' + '<p id="scrape-sum">' + freshScrape.summary + '</p><div class="side-options"></a><a class="save-art"><i class="material-icons">add</i>SAVE ARTICLE</a></div>';
+                 var dispScrape = '<a id="scrape-link" href="' + freshScrape.link + '" style="text-decoration: none" target="new"><p id="scrape-title">' + freshScrape.title + '</p><hr>' + '<p id="scrape-sum">' + freshScrape.summary + '</p><div class="side-options"></a><a class="save-art"><i class="material-icons">add</i>SAVE ARTICLE</a></div>';
                  listDiv.append(dispScrape);
                  $("#list-view").append(listDiv);
              }
@@ -25,7 +25,6 @@
                      saveTitle: saveTitle,
                      saveSum: saveSum
                  }
-                 console.log(saveArtObj);
                  $.ajax({
                      dataType: "json",
                      url: "/dbArtSave",
@@ -40,14 +39,13 @@
  function displayResults(newstrackerdata) {
      newstrackerdata.forEach(function(newsdata) {
          var listDiv = $("<div class='list-gen'>");
-         var dispAll = '<a href="' + newsdata.link + '" style="text-decoration: none"><p id="scrape-title">' + newsdata.title + '</p><hr>' + '<p id="scrape-sum">' + newsdata.summary + '</p></a><div class="side-options"><a class="myBtn" data-mongo-id="' + newsdata._id + '"><i class="material-icons">sort</i>ARTICLE NOTES</a><br><br>' + '<a class="del-art" data-mongo-id="' + newsdata._id + '"><i class="material-icons">clear</i>DELETE ARTICLE</a></div>';
+         var dispAll = '<a href="' + newsdata.link + '" style="text-decoration: none" target="new"><p id="scrape-title">' + newsdata.title + '</p><hr>' + '<p id="scrape-sum">' + newsdata.summary + '</p></a><div class="side-options"><a class="myBtn" data-mongo-id="' + newsdata._id + '"><i class="material-icons">sort</i>ARTICLE NOTES</a><br><br>' + '<a class="del-art" data-mongo-id="' + newsdata._id + '"><i class="material-icons">clear</i>DELETE ARTICLE</a></div>';
          listDiv.append(dispAll);
          $("#list-view").prepend(listDiv);
      });
      if ($(".list-gen").length === 0) {
          $('.no-art').text("Looks you don't have any articles saved.");
          $("#no-art").show();
-         console.log("works!");
      }
  }
  $("#saved-art-btn").on("click", function() {
@@ -59,7 +57,6 @@
          method: "GET"
      }).done(function(data) {
          displayResults(data);
-         console.log(data);
      });
      $(".scrape-list-gen").remove();
      $("#no-art").hide();
@@ -72,7 +69,6 @@
          newNoteID: newNoteID,
          currentNote: currentNote
      }
-     console.log(newNoteObj);
      $.ajax({
          url: "/notepost",
          data: newNoteObj,
@@ -85,7 +81,6 @@
      var xID = $(this).attr("data-mongo-id");
      var noteText = $(this).siblings("p").text();
      $(this).parent(".notes-from-mongo2").remove();
-     console.log(noteText + " " + xID);
      var delNoteObj = {
          xID: xID,
          noteText: noteText

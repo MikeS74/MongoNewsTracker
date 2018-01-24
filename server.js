@@ -96,7 +96,6 @@ app.post("/notedel", function(data) {
     var noteText = data.body.noteText;
     var textArray = [];
     textArray.push(noteText);
-    console.log(textArray);
     db.newstrackerdata.update({
         _id: ObjectID(xID)
     }, {
@@ -115,7 +114,6 @@ app.post("/notedel", function(data) {
 });
 app.post("/delart", function(data) {
     var delIDString = data.body.newNoteID;
-    console.log(delIDString);
     db.newstrackerdata.remove({
         _id: ObjectID(delIDString)
     }, function(err, deleted) {
