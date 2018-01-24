@@ -18,9 +18,9 @@ db.on("error", function(error) {
     console.log("Database Error:", error);
 });
 require("./routing/apiRoutes")(app);
-app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
-});
+//app.get("/", function(req, res) {
+//    res.sendFile(path.join(__dirname, "/public/index.html"));
+//});
 app.get("/all", function(req, res) {
     db.newstrackerdata.find({}, function(error, found) {
         if (error) {
