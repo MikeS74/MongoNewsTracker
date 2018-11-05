@@ -48,17 +48,19 @@ app.get("/scrape", function(req, res) {
     request("https://www.nytimes.com/section/us", function(error, response, html) {
         var $ = cheerio.load(html);
         var results = [];
-        $("h2.headline").each(function(i, element) {
+        $("h2").each(function(i, element) {
             var title = $(element).text().trim();
-            var summary = $(element).siblings('.summary').text().trim();
+            var summary = $(element).siblings('p').text().trim();
             var link = $(element).children().attr("href");
             if (link === undefined) {
                 link = $(element).closest("a").attr("href");
             }
+
+            var nytLink = "https://www.nytimes.com" + link;
             var newScrapeObj = {
                 title: title,
                 summary: summary,
-                link: link
+                link: nytLink
             }
             tempScraped.push(newScrapeObj);
         });

@@ -7,10 +7,12 @@
      $.ajax({
          url: "/scrape",
          type: 'GET'
-     }) 
+     })
      setTimeout(function() {
          $.get("/api/tempScraped", function(data) {
+             console.log(data.splice(0, 2));
              for (var i = 0; i < data.length; i++) {
+                if (i === 15) {break;}
                  var freshScrape = data[i];
                  var listDiv = $("<div class='scrape-list-gen'>");
                  var dispScrape = '<a id="scrape-link" href="' + freshScrape.link + '" style="text-decoration: none" target="new"><p id="scrape-title">' + freshScrape.title + '</p><hr>' + '<p id="scrape-sum">' + freshScrape.summary + '</p><div class="side-options"></a><a class="save-art"><i class="material-icons">add</i>SAVE ARTICLE</a></div>';
