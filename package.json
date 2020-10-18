@@ -13,7 +13,7 @@
     "body-parser": "^1.18.3",
     "cheerio": "^0.20.0",
     "express": "^4.16.4",
-    "mongodb": "^3.1.10",
+    "mongodb": "^3.1.13",
     "mongojs": "^3.1.0",
     "nodemon": "^2.0.5",
     "npm": "^6.4.1",
